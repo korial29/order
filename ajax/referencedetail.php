@@ -48,7 +48,7 @@ if ($_POST["plugin_order_references_id"] > 0) {
          echo "<input type='text' name='quantity' size='5'>";
          break;
       case 'priceht':
-         echo "<input type='text' name='price' value=\"" . Html::formatNumber($price, true) . "\" size='5'>";
+         echo "<input type='text' name='price' value=\"" . str_replace('&nbsp;', ' ', Html::formatNumber($price)) . "\" size='5'>";
          break;
       case 'pricediscounted':
          echo "<input type='text' name='discount' size='5' value='0'>";

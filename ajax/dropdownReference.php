@@ -70,5 +70,5 @@ if (isset($_POST["itemtype"])) {
    $result = $DB->query($query);
    $price = $DB->result($result, 0, 'price_taxfree');
 
-   echo '<input type="text" name="price" value="' . $price . '" style="text-align:center" size="10" />';
+   echo '<input type="text" name="price" value="' . str_replace('&nbsp;', ' ', Html::formatNumber($price)) . '" style="text-align:center" size="10" />';
 }

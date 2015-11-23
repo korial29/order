@@ -207,6 +207,9 @@ class PluginOrderOrder_Item extends CommonDBRelation {
    }
 
    public function addDetails($ref_id, $itemtype, $orders_id, $quantity, $price, $discounted_price, $taxes_id) {
+      $price            = self::convertStringToNumber($price);
+      $discounted_price = self::convertStringToNumber($discounted_price);
+
       $order = new PluginOrderOrder();
       if ($quantity > 0 && $order->getFromDB($orders_id)) {
          for ($i = 0; $i < $quantity; $i++) {
@@ -229,6 +232,36 @@ class PluginOrderOrder_Item extends CommonDBRelation {
          }
       }
    }
+   
+   static function convertStringToNumber($string, $withDecimals = true) {
+      $tmpVal = array();
+
+      switch ($_SESSION['glpinumber_format']) {
+         case 0:case 3:
+            $tmpVal    = explode(".", $string);
+            $tmpVal[0] = str_replace(array(' ', '&nbsp;'), '', $tmpVal[0]);
+            break;
+         case 1:
+            $tmpVal    = explode(".", $string);
+            $tmpVal[0] = str_replace(',', '', $tmpVal[0]);
+            break;
+         case 2:case 4:
+            $tmpVal    = explode(",", $string);
+            $tmpVal[0] = str_replace(array(' ', '&nbsp;'), '', $tmpVal[0]);
+            break;
+      }
+
+      if (!isset($tmpVal[1])) {
+         $tmpVal[1] = '0';
+      }
+
+      if ($withDecimals) {
+         return $tmpVal[0].'.'.$tmpVal[1];
+      } else {
+         return $tmpVal[0];
+      }
+   }
+
 
    /* show details of orders */
    public function showItem($ID) {
